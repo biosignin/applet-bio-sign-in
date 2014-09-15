@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Implementation-Vendor: Innovery SpA
+Implementation-Title: BioSignIn Web Applet
+Implementation-Version: 1.0.0
+Permissions: all-permissions
+Created-By: Innovery SpA
+Application-Name: InnoSign Web Applet
+Codebase: *
+Application-Library-Allowable-Codebase: *
+Caller-Allowable-Codebase: *
