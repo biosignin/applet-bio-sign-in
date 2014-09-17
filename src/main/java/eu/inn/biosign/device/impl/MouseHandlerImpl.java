@@ -205,8 +205,6 @@ public class MouseHandlerImpl extends BaseDeviceHandler implements MouseListener
 		dInfo.getPressure().setMinimum(0);
 	}
 
-	
-	
 	public void PenPressed(ManagedIsoPoint penPoint) {
 		long actualTime = System.currentTimeMillis();
 		if (initTime == 0 && penPoint.getPressure() == 0)
@@ -221,10 +219,11 @@ public class MouseHandlerImpl extends BaseDeviceHandler implements MouseListener
 		}
 
 		penPoint.setTime(((int) ((isTimeSupported ? penPoint.getTime() : actualTime) - initTime)));
-
-		pointsForRenderer.add(penPoint);
 		pointsForBiometric.add(penPoint);
-		BioSign._instance.addScaledPoint(penPoint);
+		if (BioSign._instance.addScaledPoint(penPoint)) {			
+			pointsForRenderer.add(penPoint);
+			empty = false;
+		}
 
 		if ((penPoint.getPressure() > 0) && (!isDown)) {
 			isDown = true;
@@ -298,7 +297,7 @@ public class MouseHandlerImpl extends BaseDeviceHandler implements MouseListener
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-//		 System.out.println("clicked");
+		// System.out.println("clicked");
 		genericMouseEvent(e);
 		// TODO Auto-generated method stub
 
@@ -306,7 +305,7 @@ public class MouseHandlerImpl extends BaseDeviceHandler implements MouseListener
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-//		 System.out.println("pressed");
+		// System.out.println("pressed");
 		genericMouseEvent(e);
 		// TODO Auto-generated method stub
 
@@ -314,7 +313,7 @@ public class MouseHandlerImpl extends BaseDeviceHandler implements MouseListener
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-//		 System.out.println("released");
+		// System.out.println("released");
 		genericMouseEvent(e);
 		// TODO Auto-generated method stub
 
@@ -322,14 +321,14 @@ public class MouseHandlerImpl extends BaseDeviceHandler implements MouseListener
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-//		 System.out.println("entered");
+		// System.out.println("entered");
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-//		 System.out.println("exited");
+		// System.out.println("exited");
 		// TODO Auto-generated method stub
 
 	}
@@ -344,7 +343,7 @@ public class MouseHandlerImpl extends BaseDeviceHandler implements MouseListener
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-//		 System.out.println("moved");
+		// System.out.println("moved");
 		genericMouseEvent(e);
 
 		// TODO Auto-generated method stub
@@ -355,7 +354,8 @@ public class MouseHandlerImpl extends BaseDeviceHandler implements MouseListener
 		if (!isCapturing)
 			return;
 
-		PenPressed(new ManagedIsoPoint(e.getX(), e.getY(), (e.getModifiersEx() & InputEvent.BUTTON1_DOWN_MASK) == 0 ? 0 : 1));
+		PenPressed(new ManagedIsoPoint(e.getX(), e.getY(), (e.getModifiersEx() & InputEvent.BUTTON1_DOWN_MASK) == 0 ? 0
+				: 1));
 	}
 
 	// MouseDeviceConfigImpl config;

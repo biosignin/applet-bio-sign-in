@@ -198,7 +198,6 @@
 		<connection>scm:git:ssh://github.com/biosignin/applet-bio-sign-in.git</connection>
 		<developerConnection>scm:git:ssh://git@github.com/biosignin/applet-bio-sign-in.git</developerConnection>
 		<url>https://github.com/biosignin/applet-bio-sign-in</url>
-		<tag>v2.0.2</tag>
 	</scm>
 	<distributionManagement>
 		<repository>
