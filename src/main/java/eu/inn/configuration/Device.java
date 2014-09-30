@@ -14,13 +14,13 @@ public class Device {
 
 //	public static PDDocument PDFDOCUMENT = null;
 
-	public static boolean useAppletRendering = false;
+	public static boolean useAppletRendering = true;
 
 	public static String TAG;
 	public static double clientRatio = 1;
 
 	public static LinkedList<SignatureBean> signatureBeans = new LinkedList<SignatureBean>();
 
-	public static boolean usePdfJs = false;
+//	public static boolean useExternalRenderer = false;
 
 }

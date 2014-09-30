@@ -13,7 +13,10 @@ import java.util.List;
 
 import javax.swing.JApplet;
 
+import netscape.javascript.JSObject;
+
 import org.bouncycastle.util.encoders.Base64;
+import org.omg.CORBA.PUBLIC_MEMBER;
 
 import eu.inn.biosign.device.SignatureBean;
 import eu.inn.biosign.listener.IDeviceListener;
@@ -21,9 +24,22 @@ import eu.inn.biosign.util.FileUtils;
 import eu.inn.biosign.util.MemoryWarningSystem;
 import eu.inn.configuration.BindingData;
 import eu.inn.configuration.Device;
+
 //import org.apache.pdfbox.pdmodel.PDDocument;
 
 public class SignatureDeviceManager extends JApplet {
+
+	public IExternalImageRenderer externalImageRenderer = null;
+
+	public void setImageRenderer(IExternalImageRenderer renderer, boolean isMixed) {
+		Device.useAppletRendering = isMixed;
+		externalImageRenderer = renderer;
+		if (BioSign._instance != null && BioSign._instance.tablet != null
+				&& BioSign._instance.tablet.getDeviceConfig() != null)
+			BioSign._instance.tablet.getDeviceConfig().clearAllCache();
+		// Device.cachePureImageFromPDF.
+		setPdfBase64Image("", -1, 1, -1);
+	}
 
 	List<IDeviceListener> listeners = new ArrayList<IDeviceListener>();
 
@@ -63,17 +79,17 @@ public class SignatureDeviceManager extends JApplet {
 		setExportScale(DEFAULT_EXPORT_SCALE);
 		MemoryWarningSystem.setPercentageUsageThreshold(0.8);
 
-	    MemoryWarningSystem mws = new MemoryWarningSystem();
-	    mws.addListener(new MemoryWarningSystem.Listener() {
-	      public void memoryUsageLow(long usedMemory, long maxMemory) {
-	        System.out.println("Memory usage low!!!");
-	        double percentageUsed = ((double) usedMemory) / maxMemory;
-	        System.out.println("percentageUsed = " + percentageUsed);
-	        if (BioSign._instance != null && BioSign._instance.tablet != null
-					&& BioSign._instance.tablet.getDeviceConfig() != null)
-				BioSign._instance.tablet.getDeviceConfig().didReceiveMemoryWarning();
-	      }
-	    });
+		MemoryWarningSystem mws = new MemoryWarningSystem();
+		mws.addListener(new MemoryWarningSystem.Listener() {
+			public void memoryUsageLow(long usedMemory, long maxMemory) {
+				System.out.println("Memory usage low!!!");
+				double percentageUsed = ((double) usedMemory) / maxMemory;
+				System.out.println("percentageUsed = " + percentageUsed);
+				if (BioSign._instance != null && BioSign._instance.tablet != null
+						&& BioSign._instance.tablet.getDeviceConfig() != null)
+					BioSign._instance.tablet.getDeviceConfig().didReceiveMemoryWarning();
+			}
+		});
 
 	}
 
@@ -104,12 +120,13 @@ public class SignatureDeviceManager extends JApplet {
 		Device.TAG = " seq=45,displayName=Firma correntista,w=250,h=75,description=ciao sono la descrizione della firma";
 
 		// TabletManager.IS_MOUSE_ALLOWED=true;
-		String imageString=null;
+		String imageString = null;
 		try {
-			imageString=new String(Base64.encode(FileUtils.readFileToByteArray(new File("c:\\getImage.png"))));;
+			imageString = new String(Base64.encode(FileUtils.readFileToByteArray(new File("c:\\getImage.png"))));
+			;
 			String urlString = "http://192.168.1.161:8081/bio-sign-in/signManagement";
 			String uuid = "";
-//			setPdfFile(new String(Base64.encode(FileUtils.readFileToByteArray(new File("c:\\getImage.png")))));
+			// setPdfFile(new String(Base64.encode(FileUtils.readFileToByteArray(new File("c:\\getImage.png")))));
 			setPdfBase64Image(imageString, 595, 1, 3);
 		} catch (Exception ioe) {
 			System.out.println("Exception while reading the Image " + ioe);
@@ -122,22 +139,22 @@ public class SignatureDeviceManager extends JApplet {
 				Device.IS_MOUSE_ALLOWED = true;
 			else
 				setPdfBase64Image(imageString, 595, 1, 3);
-		
+
 		// forceShowDocument=!forceShowDocument;
 		long start = System.nanoTime();
-//		getPageB64(1);
+		// getPageB64(1);
 		long last = System.nanoTime();
-		System.out.println("tablet getPageB64 in " + ((last - start)/1000000) + "ms");
+		System.out.println("tablet getPageB64 in " + ((last - start) / 1000000) + "ms");
 		// this.add
 	}
 
 	public void start() {
 		if (webSigning == null) {
 			try {
-				webSigning = new BioSign();				
+				webSigning = new BioSign();
 			} catch (Exception ex) {
 				ex.printStackTrace();
-//				JSObjectWrapper.call("noDevice", null);
+				// JSObjectWrapper.call("noDevice", null);
 				return;
 			}
 
@@ -154,8 +171,8 @@ public class SignatureDeviceManager extends JApplet {
 			System.out.println("debugging");
 			debugOnTablet();
 		}
-//		JSObjectWrapper.call("initCompleted", null);
-//		JSObjectWrapper.call("log", new Object[] { "Inizializzazione applet terminatata" });
+		// JSObjectWrapper.call("initCompleted", null);
+		// JSObjectWrapper.call("log", new Object[] { "Inizializzazione applet terminatata" });
 	}
 
 	public void stop() {
@@ -167,7 +184,7 @@ public class SignatureDeviceManager extends JApplet {
 			// JSTUTablet.disconnect();
 		} catch (Exception e) {
 			e.printStackTrace();
-//			JSObjectWrapper.call("log", new Object[] { exToStr(e) });
+			// JSObjectWrapper.call("log", new Object[] { exToStr(e) });
 		}
 	}
 
@@ -227,10 +244,6 @@ public class SignatureDeviceManager extends JApplet {
 		});
 	}
 
-	public PdfPageInfo getPageInfoFromWeb(int index) {
-		return null;
-	}
-	
 	public void setPdfBase64Image(String imageDataString, int pdfPointWidth, int actualPage, int totalPage) {
 
 		BioSign._instance.tablet.getDeviceConfig().setSignPage(actualPage);
@@ -238,8 +251,8 @@ public class SignatureDeviceManager extends JApplet {
 	}
 
 	public void setSignRectangleAndScale(int x, int y, int width, int height, float scale) {
-		BioSign._instance.tablet.getDeviceConfig().setSignRectangle(x / scale, y / scale, width / scale,
-				height / scale);
+		BioSign._instance.tablet.getDeviceConfig()
+				.setSignRectangle(x / scale, y / scale, width / scale, height / scale);
 	}
 
 	public void setSignRectangle(int x, int y, int width, int height) {
@@ -250,9 +263,9 @@ public class SignatureDeviceManager extends JApplet {
 		return _instance.getSize();
 	}
 
-//	public Boolean startCapture() {
-//		return startCapture(false);
-//	}
+	// public Boolean startCapture() {
+	// return startCapture(false);
+	// }
 
 	public Boolean showDocument() {
 		return startCapture(true);
@@ -271,11 +284,10 @@ public class SignatureDeviceManager extends JApplet {
 					}
 					webSigning.acquireNext(forceAirMode);
 
-					
 					return true;
 				} catch (Throwable e) {
 					e.printStackTrace();
-//					JSObjectWrapper.call("log", new Object[] { exToStr(e) });
+					// JSObjectWrapper.call("log", new Object[] { exToStr(e) });
 				}
 				return false;
 			}
@@ -323,7 +335,7 @@ public class SignatureDeviceManager extends JApplet {
 				try {
 					byte[] b = Base64.decode(base64);
 					bais = new ByteArrayInputStream(b);
-//					Device.PDFDOCUMENT = PDDocument.load(bais);
+					// Device.PDFDOCUMENT = PDDocument.load(bais);
 					if (BioSign._instance != null && BioSign._instance.tablet != null
 							&& BioSign._instance.tablet.getDeviceConfig() != null)
 						BioSign._instance.tablet.getDeviceConfig().clearAllCache();
@@ -342,33 +354,42 @@ public class SignatureDeviceManager extends JApplet {
 			}
 		});
 	}
-	
+
 	public void setEnablePdfJS() {
+		final SignatureDeviceManager self = this;
 		AccessController.doPrivileged(new PrivilegedAction<Object>() {
 			@Override
 			public Object run() {
 				try {
-					Device.usePdfJs = true;
-					if (BioSign._instance != null && BioSign._instance.tablet != null
-							&& BioSign._instance.tablet.getDeviceConfig() != null)
-						BioSign._instance.tablet.getDeviceConfig().clearAllCache();
-					// Device.cachePureImageFromPDF.
-					Device.useAppletRendering = true;
-					setPdfBase64Image("", -1, 1, -1);
+					// Device.useExternalRenderer = true;
+					self.setImageRenderer(new IExternalImageRenderer() {
+
+						@Override
+						public PdfPageInfo getPageInfo(int index) {
+							JSObject window = JSObject.getWindow(self);
+							JSObject pdfInfo = (JSObject) window.eval("getPdfPage(" + index + ")");
+							System.out.println("pdfInfo : " + pdfInfo.toString());
+							return new PdfPageInfo(((Number) pdfInfo.getMember("totalPages")).intValue(),
+									((Number) pdfInfo.getMember("pointWidth")).intValue(), (String) pdfInfo
+											.getMember("imgB64"));
+						}
+					},true);
+
+					
 				} catch (Exception ex) {
 					ex.printStackTrace();
-					
+
 				}
 				return null;
 			}
 		});
 	}
 
-//	public JSObject getPageInfoFromWeb(int index) {
-//		JSObject window = JSObject.getWindow(this);
-//		return (JSObject) window.eval("getPdfPage("+index+")");
-//	}
-	
+	// public JSObject getPageInfoFromWeb(int index) {
+	// JSObject window = JSObject.getWindow(this);
+	// return (JSObject) window.eval("getPdfPage("+index+")");
+	// }
+
 	public void setEnableDocView(String asBoolean) {
 		System.out.println("EnableDocView " + asBoolean);
 		boolean enableDocView = false;

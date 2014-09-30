@@ -185,9 +185,9 @@ public abstract class DeviceConfig {
 //							.get(page - 1)).getMediaBox().getWidth());
 //					totalPage = Device.PDFDOCUMENT.getDocumentCatalog().getAllPages().size();
 //				} else 
-					if(Device.usePdfJs) {
+					if(DeviceManager._instance.externalImageRenderer!=null) {
 					System.out.println("Read image of page " + page + "from web");
-					PdfPageInfo pdfInfo = DeviceManager._instance.getPageInfoFromWeb(page -1);
+					PdfPageInfo pdfInfo = DeviceManager._instance.externalImageRenderer.getPageInfo(page -1);
 					System.out.println("pdfInfo : " + pdfInfo.toString());
 					totalPage = pdfInfo.getTotalPage();
 					pointWidth = pdfInfo.getPointWidth();
