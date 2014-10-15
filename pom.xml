@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>eu.inn.websigning</groupId>
 	<artifactId>applet-bio-sign-in</artifactId>
-	<version>0.0.2-SNAPSHOT</version>
+	<version>0.0.2</version>
 	<inceptionYear>2014</inceptionYear>
 	<description>Java Applet for biometric trait acquisition</description>	
 	<organization>
@@ -250,7 +250,8 @@
 		<connection>scm:git:ssh://github.com/biosignin/applet-bio-sign-in.git</connection>
 		<developerConnection>scm:git:ssh://git@github.com/biosignin/applet-bio-sign-in.git</developerConnection>
 		<url>https://github.com/biosignin/applet-bio-sign-in</url>
-	</scm>
+	  <tag>v0.0.2</tag>
+  </scm>
 	<distributionManagement>
 		<repository>
 			<id>InnoveryRelease</id>
