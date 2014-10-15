@@ -172,7 +172,7 @@ public class BioSign extends JPanel implements MouseListener, MouseMotionListene
 	boolean lastInside=false;
 
 	public boolean addScaledPoint(ManagedIsoPoint pOrig, boolean excludeScale) {
-		ManagedIsoPoint p = new ManagedIsoPoint(pOrig.getX(), pOrig.getY());		
+		ManagedIsoPoint p = new ManagedIsoPoint(pOrig.getX(), pOrig.getY(), pOrig.getPressure());		
 		Point point =  new Point((int)Math.round(p.getX()), (int) Math.round(p.getY()));
 		Rectangle rect = null;
 		if (DeviceConfig.getSignatureArea()==null) {
