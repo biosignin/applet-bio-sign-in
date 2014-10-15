@@ -3,6 +3,12 @@
 	<groupId>eu.inn.websigning</groupId>
 	<artifactId>applet-bio-sign-in</artifactId>
 	<version>0.0.2-SNAPSHOT</version>
+	<inceptionYear>2014</inceptionYear>
+	<description>Java Applet for biometric trait acquisition</description>	
+	<organization>
+		<name>Innovery SpA</name>
+		<url>http://www.biosignin.org</url>
+	</organization>
 	<properties>
 		<p12file>src/main/keystore/signApplet.p12</p12file>
 		<p12pwd>gxNIjG</p12pwd>
@@ -150,6 +156,11 @@
 		<dependency>
 			<groupId>eu.inn.biometric.sign</groupId>
 			<artifactId>bsi-core</artifactId>
+			<version>0.0.2</version>
+		</dependency>
+		<dependency>
+			<groupId>eu.inn.biometric.sign</groupId>
+			<artifactId>bc-crypto-bsi</artifactId>
 			<version>0.0.1</version>
 		</dependency>
 		<dependency>
@@ -177,8 +188,8 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.0</version>
 				<configuration>
-					<source>1.7</source>
-					<target>1.7</target>
+					<source>1.6</source>
+					<target>1.6</target>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -203,6 +214,35 @@
 						<version>1.8.1</version>
 					</dependency>
 				</dependencies>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>license-maven-plugin</artifactId>
+				<version>1.7</version>
+				
+
+				<executions>
+					<execution>
+						<id>first</id>
+						<goals>
+							<goal>update-file-header</goal>
+						</goals>
+						<phase>process-sources</phase>
+						<configuration>
+							<descriptionTemplate>${basedir}/src/license/LicenseHeader.ftl</descriptionTemplate>
+							<licenseName>agpl_v3</licenseName>
+							<roots>
+								<root>src/main/java</root>
+							</roots>
+						</configuration>
+					</execution>
+					<execution>
+						<id>download-licenses</id>
+						<goals>
+							<goal>download-licenses</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

@@ -1,7 +1,30 @@
 package eu.inn.biosign.device.impl;
 
+/*
+ * #%L
+ * Java Applet for biometric trait acquisition [http://www.biosignin.org]
+ * MouseHandlerImpl.java is part of BioSignIn project
+ * %%
+ * Copyright (C) 2014 Innovery SpA
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * #L%
+ */
+
+
 import java.awt.Dimension;
-import java.awt.Point;
+//import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
@@ -11,12 +34,13 @@ import java.awt.image.BufferedImage;
 
 import eu.inn.biometric.signature.device.CapturingComponent;
 import eu.inn.biometric.signature.device.MetricUnits;
+import eu.inn.biometric.signature.device.Point;
 import eu.inn.biometric.signature.device.RealSize;
 import eu.inn.biometric.signature.device.SignArea;
 import eu.inn.biometric.signature.managed.ManagedIsoPoint;
-import eu.inn.biosign.DeviceManager;
 import eu.inn.biosign.BioSign;
 import eu.inn.biosign.BioSign.Button;
+import eu.inn.biosign.DeviceManager;
 import eu.inn.biosign.device.BaseDeviceHandler;
 import eu.inn.biosign.device.config.DeviceConfig;
 import eu.inn.biosign.device.config.impl.MouseDeviceConfigImpl;
@@ -194,9 +218,9 @@ public class MouseHandlerImpl extends BaseDeviceHandler implements MouseListener
 	public void populateDeviceInformation(CapturingComponent dInfo) {
 		Dimension d = BioSign._instance.getSize();
 		// Caps caps = JstuTableProxy.getCapabilities();
-
-		dInfo.setRealSize(new RealSize(MetricUnits.Pixels, d));
-		dInfo.setSignArea(new SignArea(new Point(0, 0), d));
+		eu.inn.biometric.signature.device.Dimension safe = new eu.inn.biometric.signature.device.Dimension(d.width, d.height);
+		dInfo.setRealSize(new RealSize(MetricUnits.Pixels, safe));
+		dInfo.setSignArea(new SignArea(new Point(0, 0), safe));
 		dInfo.getTimeInfo().setSupported(true);
 		dInfo.getTimeInfo().setTimeSupportDuringAirMoves(true);
 		dInfo.getTimeInfo().setFixedSamplingRate(false);

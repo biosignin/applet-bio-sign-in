@@ -1,5 +1,28 @@
 package eu.inn.biosign.device;
 
+/*
+ * #%L
+ * Java Applet for biometric trait acquisition [http://www.biosignin.org]
+ * VisibleDeviceHandler.java is part of BioSignIn project
+ * %%
+ * Copyright (C) 2014 Innovery SpA
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * #L%
+ */
+
+
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -361,14 +384,14 @@ public abstract class VisibleDeviceHandler extends BaseDeviceHandler {
 					slidingThread.interrupt();
 				}
 			}
-			if (getDeviceConfig().getActiveAreaForBackground().contains(penPoint)) {
+			if (getDeviceConfig().getActiveAreaForBackground().contains(new Point(penPoint.getX(), penPoint.getY()))) {
 //				System.out.println("IN MOVE");
 				if (penPoint.getPressure() > 0) {
 					if (lastPoint == null) {
 						lastPoint = penPoint;
 					}
 					getDeviceConfig().getImageBean().getOffset()
-							.translate(lastPoint.x - penPoint.x, lastPoint.y - penPoint.y);
+							.translate(lastPoint.getX() - penPoint.getX(), lastPoint.getY() - penPoint.getY());
 					getVisibleJpanel().repaint();
 				}
 			} else {

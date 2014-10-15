@@ -1,5 +1,28 @@
 package eu.inn.biosign.device.config;
 
+/*
+ * #%L
+ * Java Applet for biometric trait acquisition [http://www.biosignin.org]
+ * DeviceConfig.java is part of BioSignIn project
+ * %%
+ * Copyright (C) 2014 Innovery SpA
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * #L%
+ */
+
+
 import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -186,7 +209,7 @@ public abstract class DeviceConfig {
 //					totalPage = Device.PDFDOCUMENT.getDocumentCatalog().getAllPages().size();
 //				} else 
 					if(DeviceManager._instance.externalImageRenderer!=null) {
-					System.out.println("Read image of page " + page + "from web");
+					System.out.println("Read image of page " + page + "from external renderer");
 					PdfPageInfo pdfInfo = DeviceManager._instance.externalImageRenderer.getPageInfo(page -1);
 					System.out.println("pdfInfo : " + pdfInfo.toString());
 					totalPage = pdfInfo.getTotalPage();
@@ -198,7 +221,7 @@ public abstract class DeviceConfig {
 					pureImageFromPDF = ImageIO.read(bis);
 					bis.close();
 					long last = System.nanoTime();
-					System.out.println("tablet usepdfjs in " + ((last - start)/1000000) + "ms");
+					System.out.println("tablet use external renderer in " + ((last - start)/1000000) + "ms");
 					
 				}else if (b64.startsWith("http")) {
 					System.out.println("read from " + b64);
@@ -646,23 +669,24 @@ public abstract class DeviceConfig {
 		boolean simulated = false;
 		if (point instanceof ManagedIsoPointSimulated)
 			simulated = ((ManagedIsoPointSimulated) point).simulated;
-		if (!simulated && getOkButton() != null && getOkButton().contains(point)) {
+		Point standardPoint = new Point(point.getX(), point.getY());
+		if (!simulated && getOkButton() != null && getOkButton().contains(standardPoint)) {
 			return Button.OK;
 		}
-		if (getRetryButton() != null && getRetryButton().contains(point)) {
+		if (getRetryButton() != null && getRetryButton().contains(standardPoint)) {
 			return Button.CLEAR;
 		}
-		if (getCancelButton() != null && getCancelButton().contains(point)) {
+		if (getCancelButton() != null && getCancelButton().contains(standardPoint)) {
 			return Button.CANCEL;
 		}
 		if (isAirModeSupported()) {
-			if (getAirModeButton() != null && getAirModeButton().contains(point)) {
+			if (getAirModeButton() != null && getAirModeButton().contains(standardPoint)) {
 				return Button.AIRMODE;
 			}
-			if (getNextButton() != null && getNextButton().contains(point)) {
+			if (getNextButton() != null && getNextButton().contains(standardPoint)) {
 				return Button.NEXT;
 			}
-			if (getPrevButton() != null && getPrevButton().contains(point)) {
+			if (getPrevButton() != null && getPrevButton().contains(standardPoint)) {
 				return Button.PREV;
 			}
 

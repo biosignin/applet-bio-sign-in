@@ -1,14 +1,38 @@
 package eu.inn.biosign.device.impl;
 
-import java.awt.Dimension;
-import java.awt.Point;
+/*
+ * #%L
+ * Java Applet for biometric trait acquisition [http://www.biosignin.org]
+ * WacomDtuMouseHandlerImpl.java is part of BioSignIn project
+ * %%
+ * Copyright (C) 2014 Innovery SpA
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * #L%
+ */
+
+
+
 import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
 import eu.inn.biometric.signature.device.CapturingComponent;
+import eu.inn.biometric.signature.device.Dimension;
 import eu.inn.biometric.signature.device.MetricUnits;
+import eu.inn.biometric.signature.device.Point;
 import eu.inn.biometric.signature.device.RealSize;
 import eu.inn.biometric.signature.device.SignArea;
 import eu.inn.configuration.ManagedIsoPointSimulated;
@@ -28,8 +52,10 @@ public class WacomDtuMouseHandlerImpl extends WacomDtuBaseHandlerImpl implements
 
 	@Override
 	public void populateDeviceInformation(CapturingComponent dInfo) {
+		java.awt.Dimension d = getDimension();
+		eu.inn.biometric.signature.device.Dimension safe = new eu.inn.biometric.signature.device.Dimension(d.width, d.height);
 		dInfo.setRealSize(new RealSize(MetricUnits.Points, new Dimension(615, 384)));
-		dInfo.setSignArea(new SignArea(new Point(0, 0), getDimension()));
+		dInfo.setSignArea(new SignArea(new Point(0, 0), safe));
 		dInfo.getTimeInfo().setSupported(true);
 		dInfo.getPressure().setMaximum(getMaxPressure());
 		dInfo.getPressure().setMinimum(0);

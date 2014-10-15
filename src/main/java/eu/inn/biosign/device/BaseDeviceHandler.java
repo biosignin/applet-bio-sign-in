@@ -1,5 +1,28 @@
 package eu.inn.biosign.device;
 
+/*
+ * #%L
+ * Java Applet for biometric trait acquisition [http://www.biosignin.org]
+ * BaseDeviceHandler.java is part of BioSignIn project
+ * %%
+ * Copyright (C) 2014 Innovery SpA
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * #L%
+ */
+
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
@@ -71,7 +94,7 @@ public abstract class BaseDeviceHandler {
 		toRemove = new ArrayList<ManagedIsoPoint>();
 		Collections.reverse(pointsForBiometric);
 		for (ManagedIsoPoint penPoint : pointsForBiometric) {
-			if (penPoint.pressure > 0)
+			if (penPoint.getPressure() > 0)
 				break;
 			toRemove.add(penPoint);
 		}
@@ -81,7 +104,7 @@ public abstract class BaseDeviceHandler {
 		toRemove = new ArrayList<ManagedIsoPoint>();
 		Collections.reverse(pointsForBiometric);
 		for (ManagedIsoPoint penPoint : pointsForBiometric) {
-			if (penPoint.pressure > 0)
+			if (penPoint.getPressure() > 0)
 				break;
 			toRemove.add(penPoint);
 		}
@@ -160,19 +183,19 @@ public abstract class BaseDeviceHandler {
 		int minY = Integer.MAX_VALUE;
 		int maxY = 0;
 		for (ManagedIsoPoint p : penPoints) {
-			if (p.pressure == 0)
+			if (p.getPressure() == 0)
 				continue;
 			if (deviceConfig.getButton(p) != null) {
 				continue;
 			}
-			if (p.x < minX)
-				minX = p.x;
-			if (p.x > maxX)
-				maxX = p.x;
-			if (p.y < minY)
-				minY = p.y;
-			if (p.y > maxY)
-				maxY = p.y;
+			if (p.getX() < minX)
+				minX = p.getX();
+			if (p.getX() > maxX)
+				maxX = p.getX();
+			if (p.getY() < minY)
+				minY = p.getY();
+			if (p.getY() > maxY)
+				maxY = p.getY();
 		}
 		return new Rectangle(minX - deviceConfig.getSigThickness(), minY - deviceConfig.getSigThickness(), maxX - minX
 				+ (deviceConfig.getSigThickness() * 2), maxY - minY + (deviceConfig.getSigThickness() * 2));

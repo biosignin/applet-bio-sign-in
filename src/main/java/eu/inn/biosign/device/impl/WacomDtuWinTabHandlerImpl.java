@@ -1,13 +1,37 @@
 package eu.inn.biosign.device.impl;
 
-import java.awt.Dimension;
+/*
+ * #%L
+ * Java Applet for biometric trait acquisition [http://www.biosignin.org]
+ * WacomDtuWinTabHandlerImpl.java is part of BioSignIn project
+ * %%
+ * Copyright (C) 2014 Innovery SpA
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * #L%
+ */
+
+
+
 import java.awt.GraphicsDevice;
-import java.awt.Point;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 
 import eu.inn.biometric.signature.device.CapturingComponent;
+import eu.inn.biometric.signature.device.Dimension;
 import eu.inn.biometric.signature.device.MetricUnits;
+import eu.inn.biometric.signature.device.Point;
 import eu.inn.biometric.signature.device.RealSize;
 import eu.inn.biometric.signature.device.SignArea;
 import eu.inn.biosign.util.StaticUtils;
@@ -86,9 +110,13 @@ public class WacomDtuWinTabHandlerImpl extends WacomDtuBaseHandlerImpl {
 
 	@Override
 	public void populateDeviceInformation(CapturingComponent dInfo) {
-		Dimension d = getDimension(); //TODO: Change to real wintab dimension when supported
+		
+		java.awt.Dimension d = getDimension();
+		eu.inn.biometric.signature.device.Dimension safe = new eu.inn.biometric.signature.device.Dimension(d.width, d.height);
 		dInfo.setRealSize(new RealSize(MetricUnits.Points, new Dimension(615, 384)));
-		dInfo.setSignArea(new SignArea(new Point(0, 0), d));
+		dInfo.setSignArea(new SignArea(new Point(0, 0), safe));
+		
+
 		dInfo.getTimeInfo().setSupported(true);
 		dInfo.getTimeInfo().setTimeSupportDuringAirMoves(true);
 		dInfo.getTimeInfo().setFixedSamplingRate(false);

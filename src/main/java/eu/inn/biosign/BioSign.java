@@ -1,5 +1,28 @@
 package eu.inn.biosign;
 
+/*
+ * #%L
+ * Java Applet for biometric trait acquisition [http://www.biosignin.org]
+ * BioSign.java is part of BioSignIn project
+ * %%
+ * Copyright (C) 2014 Innovery SpA
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * #L%
+ */
+
+
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -149,8 +172,8 @@ public class BioSign extends JPanel implements MouseListener, MouseMotionListene
 	boolean lastInside=false;
 
 	public boolean addScaledPoint(ManagedIsoPoint pOrig, boolean excludeScale) {
-		ManagedIsoPoint p = (ManagedIsoPoint)pOrig.clone();		
-		Point point =  new Point((int)Math.round(p.x), (int) Math.round(p.y));
+		ManagedIsoPoint p = new ManagedIsoPoint(pOrig.getX(), pOrig.getY());		
+		Point point =  new Point((int)Math.round(p.getX()), (int) Math.round(p.getY()));
 		Rectangle rect = null;
 		if (DeviceConfig.getSignatureArea()==null) {
 			rect=tablet.getDeviceConfig().getActiveAreaForBackground();
@@ -164,7 +187,9 @@ public class BioSign extends JPanel implements MouseListener, MouseMotionListene
 			lastInside=true;
 		//		new Point(Math.round(p.x), (int) Math.round(p.y)))) {
 			if (!excludeScale) {
-				p.setLocation(p.getX()*scale, p.getY()*scale);
+				p.setX(Math.round(p.getX()*scale));
+				p.setY(Math.round(p.getY()*scale));
+//				p.setLocation(p.getX()*scale, p.getY()*scale);
 				
 				
 			}
@@ -175,7 +200,7 @@ public class BioSign extends JPanel implements MouseListener, MouseMotionListene
 			if (lastInside)
 			{
 				scalePoints.add(new ManagedIsoPoint(0, 0, 0));
-				pOrig.pressure=0;
+				pOrig.setPressure(0);
 				lastInside=false;
 				return true;
 			}
@@ -371,6 +396,9 @@ public class BioSign extends JPanel implements MouseListener, MouseMotionListene
 		repaint();
 		long loadedImage = System.nanoTime();
 		System.out.println("tablet reloadedImage in " + ((loadedImage - cleared)/1000000) + "ms");
+		for (IDeviceListener list :DeviceManager._instance.listeners) {
+			list.retry(DeviceManager._instance);
+			}
 	}
 
 	public void pressCancelButton() {

@@ -1,5 +1,28 @@
 package eu.inn.biosign;
 
+/*
+ * #%L
+ * Java Applet for biometric trait acquisition [http://www.biosignin.org]
+ * SignatureDeviceManager.java is part of BioSignIn project
+ * %%
+ * Copyright (C) 2014 Innovery SpA
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * #L%
+ */
+
+
 import java.awt.Dimension;
 import java.awt.Image;
 import java.io.ByteArrayInputStream;
@@ -12,11 +35,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JApplet;
+import javax.swing.JPanel;
 
 import netscape.javascript.JSObject;
 
 import org.bouncycastle.util.encoders.Base64;
-import org.omg.CORBA.PUBLIC_MEMBER;
 
 import eu.inn.biosign.device.SignatureBean;
 import eu.inn.biosign.listener.IDeviceListener;
@@ -29,16 +52,19 @@ import eu.inn.configuration.Device;
 
 public class SignatureDeviceManager extends JApplet {
 
+//	private JPanel renderingPanel=null;
+	
 	public IExternalImageRenderer externalImageRenderer = null;
 
 	public void setImageRenderer(IExternalImageRenderer renderer, boolean isMixed) {
 		Device.useAppletRendering = isMixed;
 		externalImageRenderer = renderer;
 		if (BioSign._instance != null && BioSign._instance.tablet != null
-				&& BioSign._instance.tablet.getDeviceConfig() != null)
+				&& BioSign._instance.tablet.getDeviceConfig() != null) {
 			BioSign._instance.tablet.getDeviceConfig().clearAllCache();
 		// Device.cachePureImageFromPDF.
 		setPdfBase64Image("", -1, 1, -1);
+		}
 	}
 
 	List<IDeviceListener> listeners = new ArrayList<IDeviceListener>();
@@ -72,7 +98,13 @@ public class SignatureDeviceManager extends JApplet {
 
 	public final static float DEFAULT_EXPORT_SCALE = 1f / (3f / 4f) / 2f;// 1f/(793f/1190f)/2;
 
+//	public SignatureDeviceManager() {
+//		this(null);
+//	}
+	
+	
 	public SignatureDeviceManager() {
+//		this.renderingPanel=panel;
 		// TODO Auto-generated constructor stub
 		_instance = this;
 		setFocusable(true);
@@ -92,6 +124,7 @@ public class SignatureDeviceManager extends JApplet {
 		});
 
 	}
+	
 
 	// public static URL codeBase;
 

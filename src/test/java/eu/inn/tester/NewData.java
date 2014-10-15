@@ -1,17 +1,14 @@
 package eu.inn.tester;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
 
-import eu.inn.biometric.signature.extendeddata.AbstractExtendedData;
+import eu.inn.biometric.signature.extendeddata.ExtendedData;
 
-@XmlAccessorType(XmlAccessType.FIELD)
-@XmlRootElement
-public class NewData extends AbstractExtendedData {
+@Root
+public class NewData extends ExtendedData {
 
-	@XmlElement
+	@Element
 	private String test = "campoTest";
 
 }
