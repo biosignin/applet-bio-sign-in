@@ -213,7 +213,7 @@ public class BioSign extends JPanel implements MouseListener, MouseMotionListene
 	
 	@Override
 	public void paint(Graphics g) {
-		System.out.println("BioSign Paint");
+		
 		super.paint(g);
 //		bkImage = justButtons.getScaledInstance(
 //				Math.round(allInOne.getWidth() * scale),
@@ -415,19 +415,6 @@ public class BioSign extends JPanel implements MouseListener, MouseMotionListene
 			DeviceManager._instance.startCapture(!tablet.getForceAirMode());
 		}
 	}
-	
-	
-
-	// private static byte[] transformIntTo4Bytes(int int_0) {
-	// return new byte[] { (byte) ((int_0 & -16777216) >> 24),
-	// (byte) ((int_0 & 16711680) >> 16),
-	// (byte) ((int_0 & 65280) >> 8), (byte) int_0 };
-	// }
-	//
-	// private byte[] transformIntTo2Bytes(short short_0) {
-	// return new byte[] { (byte) (((int) short_0 & 65280) >> 8),
-	// (byte) short_0 };
-	// }
 
 	public BaseDeviceHandler tablet=null;// = new WacomStuHandlerImpl();
 
@@ -466,8 +453,6 @@ public class BioSign extends JPanel implements MouseListener, MouseMotionListene
 						JSObjectWrapper.call("log",
 								new Object[] { "SDI : "
 										+ Signature.outputSdi });
-//						IOUtils.write(image, new FileOutputStream(new File(
-//								"c:\\imageFromTablet.png")));
 						JSObjectWrapper.call("signAcquired", new Object[] {
 								Signature.outputSdi,
 								Signature.image });
@@ -538,6 +523,7 @@ public class BioSign extends JPanel implements MouseListener, MouseMotionListene
 				gAllInOne.drawImage(image.getImage(), -image.getOffset().x+tablet.getDeviceConfig().getActiveAreaForBackground().x, -image.getOffset().y+tablet.getDeviceConfig().getActiveAreaForBackground().y, null);
 
 			gAllInOne.drawImage(overlay, 0, 0, null);
+			gAllInOne.setColor(Color.black);
 			
 			if (!tablet.getDeviceConfig().isButtonImageFixed()) {
 
@@ -552,14 +538,15 @@ public class BioSign extends JPanel implements MouseListener, MouseMotionListene
 					System.out.println("Resizing buttons image");
 				}
 			}
-			
-			
 			gJustButton.drawImage(overlay, 0, 0, null);
 //			if (tablet.getDeviceConfig().isAirModeSupported())
 				tablet.setBackgroundImage(justButtons);
 //			else
 //				tablet.setBackgroundImage(allInOne);
-			
+
+				gJustButton.setColor(Color.black);
+				gJustButton.drawRect(tablet.getDeviceConfig().getOkButton().x, tablet.getDeviceConfig().getOkButton().y, tablet.getDeviceConfig().getOkButton().width, tablet.getDeviceConfig().getOkButton().height);			
+				
 			scale = DeviceManager._instance.getWidth()
 					/ (float) tablet.getDimension().getWidth();
 

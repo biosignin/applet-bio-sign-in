@@ -155,7 +155,7 @@ public class SignatureDeviceManager extends JApplet {
 		// TabletManager.IS_MOUSE_ALLOWED=true;
 		String imageString = null;
 		try {
-			imageString = new String(Base64.encode(FileUtils.readFileToByteArray(new File("c:\\getImage.png"))));
+			imageString = new String(Base64.encode(FileUtils.readFileToByteArray(new File("c:\\temp\\pdf.png"))));
 			;
 			String urlString = "http://192.168.1.161:8081/bio-sign-in/signManagement";
 			String uuid = "";

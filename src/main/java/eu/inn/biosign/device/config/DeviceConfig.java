@@ -364,8 +364,8 @@ public abstract class DeviceConfig {
 				System.out.println("tablet ImageUtils.clone in " + ((last - start)/1000000) + "ms");
 
 				Graphics gOriginal = originalDimensionImage.getGraphics();
-				BufferedImage scaledImage = ImageUtils.scaleImage(pureImageFromPDF, ratio);
-			
+//				BufferedImage scaledImage = ImageUtils.scaleImage(pureImageFromPDF, ratio);
+				BufferedImage scaledImage =ImageUtils.toBufferedImage(pureImageFromPDF.getScaledInstance((int)(Math.round(pureImageFromPDF.getWidth()*ratio)), -1, Image.SCALE_SMOOTH));
 				last = System.nanoTime();
 				System.out.println("tablet ImageUtils.clone + scale in " + ((last - start)/1000000) + "ms");
 				if (pngRectangle == null) {
@@ -666,10 +666,12 @@ public abstract class DeviceConfig {
 	}
 
 	public Button getButton(ManagedIsoPoint point) {
+		
 		boolean simulated = false;
 		if (point instanceof ManagedIsoPointSimulated)
 			simulated = ((ManagedIsoPointSimulated) point).simulated;
 		Point standardPoint = new Point(point.getX(), point.getY());
+		try {
 		if (!simulated && getOkButton() != null && getOkButton().contains(standardPoint)) {
 			return Button.OK;
 		}
@@ -692,6 +694,9 @@ public abstract class DeviceConfig {
 
 		}
 		return null;
+		}finally {
+			System.out.println("DOWN: sim: "+simulated+ " | "+getOkButton()+ " | "+getOkButton().contains(standardPoint));
+		}
 	}
 
 }

@@ -292,6 +292,7 @@ public class MouseHandlerImpl extends BaseDeviceHandler implements MouseListener
 
 	@SuppressWarnings("incomplete-switch")
 	private void penUp(ManagedIsoPoint penPoint) {
+		System.out.println("UP: "+actualButton);
 		if ((actualButton != null) && (actualButton == getDeviceConfig().getButton(penPoint))) {
 			if (actualButton == Button.AIRMODE) {
 				BioSign._instance.pressAirModeButton();
@@ -320,7 +321,7 @@ public class MouseHandlerImpl extends BaseDeviceHandler implements MouseListener
 	private boolean isTimeSupported = false;
 
 	@Override
-	public void mouseClicked(MouseEvent e) {
+	public void mouseClicked(MouseEvent e) {		
 		// System.out.println("clicked");
 		genericMouseEvent(e);
 		// TODO Auto-generated method stub
